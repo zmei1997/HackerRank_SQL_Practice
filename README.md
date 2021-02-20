@@ -9,3 +9,7 @@
 
 #### Aggregation
 1. Top Earners
+2. Weather Observation Station 2
+3. Weather Observation Station 13
+4. Weather Observation Station 14
+5. Weather Observation Station 15
