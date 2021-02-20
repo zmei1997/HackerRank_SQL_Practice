@@ -6,3 +6,6 @@
 3. Occupations - Pivot
 4. Binary Tree Nodes
 5. New Companies
+
+#### Aggregation
+1. Top Earners
