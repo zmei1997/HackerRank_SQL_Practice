@@ -32,3 +32,13 @@ Advanced Select - Occupations - Pivot
 **/
 -- Solution:
 -- SQL Server
+SELECT
+    [Doctor], [Professor], [Singer], [Actor]
+FROM
+(
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY Occupation ORDER BY NAME) [RowNumber] FROM OCCUPATIONS
+) AS sourceTable
+PIVOT
+(
+    MAX(NAME) FOR Occupation IN ([Doctor], [Professor], [Singer], [Actor])
+) AS pivotTable
