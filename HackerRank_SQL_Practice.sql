@@ -90,3 +90,68 @@ from    Company c
         on m.manager_code = e.manager_code
 group by    c.company_code, c.founder
 order by    c.company_code asc;
+
+/**
+Aggregation - Top Earners
+**/
+-- Solution:
+-- SQL Server
+select  a.total, count(rk)
+from    (
+        select  (salary * months) as total, rank() over(order by (salary * months) desc) as rk
+        from    Employee
+        ) a
+where   a.rk = 1
+group by a.total;
+
+-- MySQL
+SELECT salary * months AS total, COUNT(*)
+FROM Employee
+GROUP BY total
+ORDER BY total DESC
+LIMIT 1;
+
+/**
+Aggregation - Weather Observation Station 2
+**/
+-- Solution:
+-- SQL Server
+-- use format(float number, '0.######') to remove tailing zeros in SQL Server
+select  format(Round(sum(LAT_N), 2), '0.######'), format(Round(sum(LONG_W), 2), '0.######')
+from    station;
+
+-- MySQL
+SELECT  ROUND(SUM(LAT_N), 2), ROUND(SUM(LONG_W), 2) 
+FROM    STATION;
+
+/**
+Aggregation - Weather Observation Station 13
+**/
+-- Solution:
+-- SQL Server
+select  format(Round(sum(LAT_N), 4), '0.######')
+from    station
+where   LAT_N > 38.7880 and LAT_N < 137.2345;
+
+/**
+Aggregation - Weather Observation Station 14
+**/
+-- Solution:
+-- SQL Server
+select  format(Round(Max(LAT_N), 4), '0.######')
+from    station
+where   LAT_N < 137.2345;
+
+/**
+Aggregation - Weather Observation Station 15
+**/
+-- Solution:
+-- SQL Server
+select  format(Round(s.LONG_W, 4), '0.######')
+from    (
+        select  Max(LAT_N) as maxN
+        from    station
+        where   LAT_N < 137.2345
+        ) a,
+        Station s
+where   s.LAT_N = a.maxN;
