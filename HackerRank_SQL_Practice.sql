@@ -155,3 +155,39 @@ from    (
         ) a,
         Station s
 where   s.LAT_N = a.maxN;
+
+/**
+Revising Aggregation - The Count Function
+**/
+-- Solution:
+-- SQL Server
+select  count(1)
+from    city
+where   population > 100000;
+
+/**
+Revising Aggregation - The Sum Function
+**/
+-- Solution:
+-- SQL Server
+select  sum(population)  
+from    city
+where   district = 'California';
+
+/**
+Revising Aggregation - Averages
+**/
+-- Solution:
+-- SQL Server
+select  avg(population)  
+from    city
+where   district = 'California';
+
+/**
+Aggregation - Averages Population - rounded down to the nearest integer.
+**/
+-- Solution:
+-- SQL Server
+select  cast(avg(population) as int)
+from    city;
+
