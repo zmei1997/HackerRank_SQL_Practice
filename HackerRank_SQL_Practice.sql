@@ -191,3 +191,29 @@ Aggregation - Averages Population - rounded down to the nearest integer.
 select  cast(avg(population) as int)
 from    city;
 
+/**
+Aggregation - Population Density Difference - difference between the maximum and minimum
+**/
+-- Solution:
+-- SQL Server
+select  max(population) - min(population)
+from    city;
+
+/**
+Aggregation - The Blunder - use replace()
+**/
+-- Solution:
+-- MySQL
+select  ceil(avg(salary) - avg(replace(salary, '0', '')))
+from    EMPLOYEES;
+
+-- SQL Server - solution 1 - not correct
+-- this result is differnet from MySQL
+-- because avg() returns int
+select  CEILING(avg(salary) - avg(cast(replace(salary, '0', '') as float)))
+from    EMPLOYEES;
+
+-- SQL Server - solution 2 - this one is correct, meets the requirement
+-- cast salary from int to float
+select  cast(ceiling(avg(cast(salary as float)) - avg(cast(replace(salary, '0', '') as float))) as int)
+from    EMPLOYEES;
