@@ -217,3 +217,46 @@ from    EMPLOYEES;
 -- cast salary from int to float
 select  cast(ceiling(avg(cast(salary as float)) - avg(cast(replace(salary, '0', '') as float))) as int)
 from    EMPLOYEES;
+
+/**
+Aggregation - Weather Observation Station 17
+**/
+-- Solution:
+-- SQL Server
+select  format(round(s.LONG_W, 4), '0.######')
+from    (
+        select  min(LAT_N) as minN
+        from    station
+        where   LAT_N > 38.7780
+        ) a
+        , station s
+where   a.minN = s.LAT_N;
+
+/**
+Aggregation - Weather Observation Station 18 - Manhattan Distance between two points
+**/
+-- Solution:
+-- SQL Server
+select  format(round(abs(max(LAT_N)-min(LAT_N)) + abs(max(LONG_W)-min(LONG_W)), 4), '0.######')
+from    station;
+
+/**
+Aggregation - Weather Observation Station 19 - Euclidean Distance between two points
+**/
+-- Solution:
+-- SQL Server
+select  format(round(sqrt(square(max(LAT_N)-min(LAT_N)) + square(max(LONG_W)-min(LONG_W))), 4), '0.######')
+from    station;
+
+/**
+Aggregation - Weather Observation Station 20 find median
+**/
+-- Solution:
+-- SQL Server
+-- find median using PERCENTILE_CONT() WITHIN GROUP(ORDER BY...) OVER()
+select  distinct format(round(PERCENTILE_CONT(0.5) WITHIN GROUP (order by LAT_N) OVER(), 4), '0.######')
+from    station;
+
+-- Oracle
+SELECT  ROUND(MEDIAN(Lat_N), 4)
+FROM    Station;
