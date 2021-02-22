@@ -23,3 +23,8 @@
 13. Weather Observation Station 18 - Manhattan Distance between two points
 14. Weather Observation Station 19 - Euclidean Distance between two points
 15. Weather Observation Station 20 - find median - sql server using PERCENTILE_CONT(0.5)
+
+#### Basic Join
+1. Asian Population
+2. The Report
+3. Top Competitors
