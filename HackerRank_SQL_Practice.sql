@@ -260,3 +260,52 @@ from    station;
 -- Oracle
 SELECT  ROUND(MEDIAN(Lat_N), 4)
 FROM    Station;
+
+/**
+Basic Join - Asian Population
+**/
+-- Solution:
+-- SQL Server
+select  sum(c.population)
+from    city c
+        inner join
+        country cty
+        on c.CountryCode = cty.Code
+where   cty.CONTINENT = 'Asia';
+
+/**
+Basic Join - The Report
+**/
+-- Solution:
+-- SQL Server
+select  case when g.grade < 8 then NULL
+        else s.name
+        end
+        , g.grade
+        , s.marks
+from    students s
+        inner join
+        grades g
+        on s.Marks between g.Min_Mark and g.Max_Mark
+order by    g.grade desc, s.name, s.marks;
+
+/**
+Basic Join - Top Competitors
+**/
+-- Solution:
+-- SQL Server
+select  h.hacker_id, h.name
+from    Submissions s
+        inner join
+        Hackers h
+        on s.hacker_id = h.hacker_id
+        inner join
+        Challenges c
+        on s.challenge_id = c.challenge_id
+        inner join
+        Difficulty d
+        on c.difficulty_level = d.difficulty_level
+where   s.score = d.score
+group by        h.hacker_id, h.name
+having          count(*) > 1 
+order by        count(*) desc, h.hacker_id;
