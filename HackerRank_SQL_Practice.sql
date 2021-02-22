@@ -309,3 +309,24 @@ where   s.score = d.score
 group by        h.hacker_id, h.name
 having          count(*) > 1 
 order by        count(*) desc, h.hacker_id;
+
+/**
+Basic Join - Ollivander's Inventory
+**/
+-- Solution:
+-- SQL Server
+with a as (
+        select  code, power, MIN(coins_needed) as coins_needed 
+        from    Wands 
+        group by    code, power
+)
+select  w.id, wp.age, w.coins_needed, w.power
+from    a
+        inner join
+        Wands w
+        on a.code = w.code and a.power = w.power and a.coins_needed = w.coins_needed
+        inner join
+        Wands_Property wp
+        on  a.code = wp.code
+where   wp.is_evil = 0
+order by    a.power desc, wp.age desc;
