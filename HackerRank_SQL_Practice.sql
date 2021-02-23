@@ -402,3 +402,77 @@ from    max_score ms
 group by    ms.hacker_id, h.name
 having      sum(ms.maxScore) <> 0
 order by    sum(ms.maxScore) desc, ms.hacker_id;
+
+/**
+Advanced Join - SQL Project Planning - using LEFT JOIN
+**/
+-- Solution:
+-- SQL Server
+select  s.start_date, min(e.end_date)
+from (
+        select a.start_date
+        from projects A
+        left join 
+        projects t
+        on a.start_date = t.end_date
+        where t.end_date is null
+    )s 
+    join (
+        select a.end_date
+        from projects A
+        left join 
+        projects t
+        on a.end_date = t.start_date
+        where t.start_date is null
+    )e
+on s.start_date < e.end_date
+group by s.start_date
+order by datediff(dd, s.start_date, min(e.end_date)), s.start_date;
+
+-- use WITH
+with StartD as (
+    select  a.start_date
+    from    projects A
+            left join 
+            projects t
+            on a.start_date = t.end_date
+            where t.end_date is null
+), endD as (
+    select  a.end_date
+    from    projects A
+            left join 
+            projects t
+            on a.end_date = t.start_date
+            where t.start_date is null
+)
+select  sd.start_date, min(ed.end_date)
+from    StartD sd
+        inner join
+        endD ed
+        on sd.start_date < ed.end_date
+group by sd.start_date
+order by datediff(dd, sd.start_date, min(ed.end_date)), sd.start_date;
+
+-- do not use JOIN
+WITH CTE_Projects AS 
+(
+  SELECT Start_Date, End_Date, ROW_NUMBER() OVER (ORDER BY Start_Date) AS RowNumber
+  FROM Projects
+)
+SELECT MIN(Start_Date), MAX(End_Date) 
+FROM CTE_Projects
+GROUP BY DATEDIFF(DAY, RowNumber, Start_Date)
+ORDER BY DATEDIFF(DAY, MIN(Start_Date), MAX(End_Date)), MIN(Start_Date);
+
+-- use rownumber 2
+SELECT T1.Start_Date,T2.End_Date 
+FROM ( 
+    SELECT Start_Date,ROW_NUMBER() OVER (ORDER BY Start_Date) RN 
+    FROM Projects 
+    WHERE Start_Date NOT IN (SELECT END_Date FROM Projects)) AS T1 
+    INNER JOIN (
+                SELECT End_Date,ROW_NUMBER() OVER (ORDER BY End_Date) RN 
+                FROM Projects 
+                WHERE End_Date NOT IN (SELECT Start_Date FROM Projects)) AS T2 
+    ON T1.RN = T2.RN 
+ORDER BY DATEDIFF(Day,T1.Start_Date,T2.End_Date),T1.Start_Date;
