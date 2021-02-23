@@ -29,3 +29,5 @@
 2. The Report
 3. Top Competitors
 4. Ollivander's Inventory
+5. Challenges - use with clause
+6. Contest Leaderboard - use with clause
