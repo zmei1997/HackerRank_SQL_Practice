@@ -330,3 +330,75 @@ from    a
         on  a.code = wp.code
 where   wp.is_evil = 0
 order by    a.power desc, wp.age desc;
+
+/**
+Basic Join - Challenges
+**/
+-- Solution:
+-- SQL Server
+select  h.hacker_id, h.name, count(c.challenge_id)
+from    hackers h
+        inner join
+        Challenges c
+        on h.hacker_id = c.hacker_id
+group by    h.hacker_id, h.name
+having  count(c.hacker_id) = (
+                                select max(cnts.cnt) 
+                                from (
+                                        select count(hacker_id) as cnt 
+                                        from Challenges 
+                                        group by hacker_id) as cnts
+                                )
+        or count(c.hacker_id) in (
+                                    select cnts.cnt 
+                                    from (
+                                            select count(hacker_id) as cnt
+                                            from Challenges
+                                            group by hacker_id) as cnts
+                                    group by cnts.cnt
+                                    having  count(cnts.cnt) = 1
+                                 )
+order by count(c.hacker_id) desc, hacker_id;
+
+-- cleaner solution using WITH
+with totalChallenges as (
+    select count(hacker_id) as cnt 
+    from Challenges 
+    group by hacker_id
+)
+select  h.hacker_id, h.name, count(c.challenge_id)
+from    hackers h
+        inner join
+        Challenges c
+        on h.hacker_id = c.hacker_id
+group by    h.hacker_id, h.name
+having  count(c.hacker_id) = (
+                                select max(totalChallenges.cnt) 
+                                from totalChallenges
+                                )
+        or count(c.hacker_id) in (
+                                    select totalChallenges.cnt 
+                                    from totalChallenges
+                                    group by totalChallenges.cnt
+                                    having  count(totalChallenges.cnt) = 1
+                                 )
+order by count(c.hacker_id) desc, hacker_id;
+
+/**
+Basic Join - Contest Leaderboard
+**/
+-- Solution:
+-- SQL Server
+with max_score as (
+            select  hacker_id, challenge_id, max(score) as maxScore
+            from    Submissions
+            group by    hacker_id, challenge_id
+)
+select  ms.hacker_id, h.name, sum(ms.maxScore)
+from    max_score ms
+        inner join
+        hackers h
+        on ms.hacker_id = h.hacker_id
+group by    ms.hacker_id, h.name
+having      sum(ms.maxScore) <> 0
+order by    sum(ms.maxScore) desc, ms.hacker_id;
