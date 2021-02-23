@@ -31,3 +31,8 @@
 4. Ollivander's Inventory
 5. Challenges - use with clause
 6. Contest Leaderboard - use with clause
+
+#### Advanced Join
+1. SQL Project Planning - using LEFT JOIN
+2. Placements
+3. Symmetric Pairs
