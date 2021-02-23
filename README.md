@@ -36,3 +36,4 @@
 1. SQL Project Planning - using LEFT JOIN
 2. Placements
 3. Symmetric Pairs
+4. Interviews - Difficulty: Hard
